@@ -57,7 +57,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 8
 .stage::before{content:"";position:absolute;inset:6%;border-radius:50%;background:var(--mint);transform:scale(0);animation:pop .9s .2s cubic-bezier(.3,1.4,.5,1) forwards}
 @keyframes pop{to{transform:scale(1)}}
 .tooth{position:absolute;inset:0;width:100%;height:100%;overflow:visible;animation:float 6s 2.6s ease-in-out infinite}
-.tooth .shape{fill:var(--surface);fill-opacity:0;stroke:var(--ink);stroke-width:3;stroke-linejoin:round;stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.8s .5s ease forwards,fillin .8s 2s forwards}
+.tooth .shape{fill:url(#tf);fill-opacity:0;stroke:var(--ink);stroke-width:3;stroke-linejoin:round;stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.8s .5s ease forwards,fillin .8s 2s forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes fillin{to{fill-opacity:1}}
 @keyframes float{50%{transform:translateY(-12px) rotate(1.5deg)}}
@@ -146,9 +146,45 @@ footer{padding:30px 0;color:var(--muted);font-size:14px;text-align:center}
   .hero h1 span i{transform:none}.hero p.lead,.hero .cta{opacity:1}
   .stage::before{transform:scale(1)}.tooth .shape{stroke-dashoffset:0;fill-opacity:1}.spark{display:none}
 }
+:root{--tcore:#FFFFFF;--tedge:#C2DFD8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--tcore:#F2FBF9;--tedge:#86BDB6}}
+:root[data-theme="dark"]{--tcore:#F2FBF9;--tedge:#86BDB6}
+/* splash */
+.splash{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-content:center;justify-items:center;gap:18px;animation:splashOut .55s 1.7s forwards}
+.splash svg{width:74px;height:88px;overflow:visible}
+.splash path{fill:none;stroke:var(--aqua);stroke-width:8;stroke-linejoin:round;stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.3s .15s ease forwards}
+.splash span{font:500 15px/1.4 var(--display);text-align:center;opacity:0;animation:fade .6s .8s forwards}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+body:not(.go) .hero,body:not(.go) .hero *,body:not(.go) .hero *::before{animation-play-state:paused!important}
+/* bubbles */
+.hero .wrap{position:relative;z-index:1}
+.bubbles{position:absolute;inset:0;pointer-events:none}
+.bubbles i{position:absolute;bottom:-60px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.7),transparent 60%),color-mix(in srgb,var(--aqua) 14%,transparent);border:1.5px solid color-mix(in srgb,var(--aqua) 40%,transparent);opacity:0;animation:bub linear infinite}
+@keyframes bub{0%{transform:translate(0,0);opacity:0}10%{opacity:1}50%{transform:translate(22px,-60vh)}90%{opacity:1}100%{transform:translate(-12px,-120vh);opacity:0}}
+/* tooth interaction */
+.stage{cursor:pointer;transition:transform .25s ease-out}
+.stage::after{content:'Нажмите на зуб';position:absolute;left:0;right:0;bottom:-10px;text-align:center;font-size:13px;color:var(--muted);opacity:0;animation:fade .6s 3.4s forwards}
+.gl{opacity:0;animation:fade .6s 2.8s forwards}
+.brush{opacity:0}
+.trail{transform-box:fill-box;transform-origin:left center;transform:scaleX(0);opacity:0}
+.brushing .brush{animation:sweep 3.2s ease-in-out forwards}
+.brushing .trail{animation:trail 3.2s ease-in-out forwards}
+@keyframes sweep{0%{transform:translate(-50px,70px);opacity:0}8%{opacity:1}28%{transform:translate(200px,80px)}52%{transform:translate(0,125px)}76%{transform:translate(200px,150px)}92%{opacity:1}100%{transform:translate(260px,150px);opacity:0}}
+@keyframes trail{0%{transform:scaleX(0);opacity:.95}85%{transform:scaleX(1);opacity:.95}100%{transform:scaleX(1);opacity:0}}
+/* menu */
+.nav{transition:height .3s}
+header{transition:box-shadow .3s}
+header.sc .nav{height:54px}
+header.sc{box-shadow:0 8px 22px -14px rgba(0,0,0,.4)}
+.nav nav a{position:relative}
+.nav nav a::after{content:'';position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--aqua);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.nav nav a:hover::after,.nav nav a.on::after{transform:scaleX(1)}
+.nav nav a.on{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.splash,.bubbles,.stage::after,.brush,.trail{display:none}.stage{transform:none!important}.gl{opacity:1}}
 </style>
 </head>
 <body>
+<div class="splash" aria-hidden="true"><svg viewBox="0 0 200 240"><path d="M100 30C70 8 20 20 24 80c2 40 20 50 26 90 4 40 12 58 26 56 14-2 12-46 24-46s10 44 24 46c14 2 22-16 26-56 6-40 24-50 26-90C180 20 130 8 100 30Z"/></svg><span>Студия современной<br>стоматологии</span></div>
 <header>
   <div class="wrap nav">
     <a class="logo" href="#top" aria-label="Студия современной стоматологии"><svg viewBox="0 0 200 240" aria-hidden="true"><path d="M100 30C70 8 20 20 24 80c2 40 20 50 26 90 4 40 12 58 26 56 14-2 12-46 24-46s10 44 24 46c14 2 22-16 26-56 6-40 24-50 26-90C180 20 130 8 100 30Z" fill="none" stroke="currentColor" stroke-width="14" stroke-linejoin="round"/></svg><span>Студия современной<br>стоматологии</span></a>
@@ -158,7 +194,7 @@ footer{padding:30px 0;color:var(--muted);font-size:14px;text-align:center}
 </header>
 
 <main id="top">
-<section class="hero">
+<section class="hero"><div class="bubbles" aria-hidden="true"></div>
   <div class="wrap">
     <div>
       <h1><span><i>Лечим зубы</i></span><span><i>без страха</i></span><span><i>и спешки</i></span></h1>
@@ -166,7 +202,7 @@ footer{padding:30px 0;color:var(--muted);font-size:14px;text-align:center}
       <div class="cta"><a class="btn" href="#book">Записаться на осмотр</a><small>Первичный осмотр — бесплатно</small></div>
     </div>
     <div class="stage" aria-hidden="true">
-      <svg class="tooth" viewBox="0 0 200 240"><path class="shape" d="M100 30C70 8 20 20 24 80c2 40 20 50 26 90 4 40 12 58 26 56 14-2 12-46 24-46s10 44 24 46c14 2 22-16 26-56 6-40 24-50 26-90C180 20 130 8 100 30Z"/></svg>
+      <svg class="tooth" viewBox="0 0 200 240"><defs><path id="sp" d="M100 30C70 8 20 20 24 80c2 40 20 50 26 90 4 40 12 58 26 56 14-2 12-46 24-46s10 44 24 46c14 2 22-16 26-56 6-40 24-50 26-90C180 20 130 8 100 30Z"/><linearGradient id="tf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--tcore)"/><stop offset="1" style="stop-color:var(--tedge)"/></linearGradient><radialGradient id="hl" gradientUnits="userSpaceOnUse" cx="80" cy="70" r="85"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><linearGradient id="tr" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".6" stop-color="#fff"/><stop offset="1" stop-color="#8FEBDD"/></linearGradient><clipPath id="tc"><use href="#sp"/></clipPath></defs><use class="shape" href="#sp"/><use class="gl" href="#sp" fill="url(#hl)"/><g clip-path="url(#tc)"><rect class="trail" width="200" height="240" fill="url(#tr)"/></g><g class="brush"><g transform="rotate(28)"><rect x="-7" y="-92" width="14" height="86" rx="7" fill="#1FA79A"/><rect x="-15" y="-8" width="30" height="12" rx="4" fill="#0F3D44"/><rect x="-15" y="4" width="30" height="13" rx="2" fill="#fff" stroke="#0F3D44" stroke-width="2" stroke-dasharray="3 3"/></g></g></svg>
       <div class="spark s1"><svg viewBox="0 0 24 24"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12Z"/></svg></div>
       <div class="spark s2"><svg viewBox="0 0 24 24"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12Z"/></svg></div>
       <div class="spark s3"><svg viewBox="0 0 24 24"><path d="M12 0c1 7 5 11 12 12-7 1-11 5-12 12-1-7-5-11-12-12 7-1 11-5 12-12Z"/></svg></div>
@@ -251,6 +287,34 @@ footer{padding:30px 0;color:var(--muted);font-size:14px;text-align:center}
 
 <script>
 (function(){
+  var rm=matchMedia('(prefers-reduced-motion: reduce)').matches, body=document.body, stage=document.querySelector('.stage'), hero=document.querySelector('.hero');
+  setTimeout(function(){body.classList.add('go')}, rm?0:1700);
+  var bb=document.querySelector('.bubbles');
+  if(!rm)for(var i=0;i<16;i++){var b=document.createElement('i'),sz=10+Math.random()*34;
+    b.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;animation-duration:'+(9+Math.random()*10)+'s;animation-delay:'+(-Math.random()*14)+'s';bb.appendChild(b)}
+  function brush(){stage.classList.remove('brushing');void stage.offsetWidth;stage.classList.add('brushing')}
+  var hl=document.getElementById('hl');
+  if(!rm){
+    setTimeout(brush,4700);
+    stage.addEventListener('click',brush);
+    hero.addEventListener('pointermove',function(e){
+      var r=stage.getBoundingClientRect(),
+      dx=Math.max(-1,Math.min(1,(e.clientX-r.left-r.width/2)/(innerWidth/2))),
+      dy=Math.max(-1,Math.min(1,(e.clientY-r.top-r.height/2)/(innerHeight/2)));
+      stage.style.transform='perspective(900px) rotateX('+(-dy*12)+'deg) rotateY('+(dx*16)+'deg)';
+      hl.setAttribute('cx',100+dx*70);hl.setAttribute('cy',90+dy*70);
+    });
+    hero.addEventListener('pointerleave',function(){stage.style.transform='';hl.setAttribute('cx',80);hl.setAttribute('cy',70)});
+    if(matchMedia('(hover:hover)').matches)document.querySelectorAll('.btn').forEach(function(bt){
+      bt.addEventListener('pointermove',function(e){var r=bt.getBoundingClientRect();bt.style.transform='translate('+(e.clientX-r.left-r.width/2)*.25+'px,'+(e.clientY-r.top-r.height/2)*.35+'px)'});
+      bt.addEventListener('pointerleave',function(){bt.style.transform=''});
+    });
+  }
+  var hd=document.querySelector('header');
+  addEventListener('scroll',function(){hd.classList.toggle('sc',scrollY>20)},{passive:true});
+  var links={};document.querySelectorAll('.nav nav a').forEach(function(a){links[a.getAttribute('href')]=a});
+  var so=new IntersectionObserver(function(es){es.forEach(function(e){var a=links['#'+e.target.id];if(a)a.classList.toggle('on',e.isIntersecting)})},{rootMargin:'-45% 0px -50% 0px'});
+  ['services','white','doctors'].forEach(function(id){so.observe(document.getElementById(id))});
   // accordion
   document.querySelectorAll('.item > button').forEach(function(b){
     b.addEventListener('click',function(){
@@ -274,11 +338,19 @@ footer{padding:30px 0;color:var(--muted);font-size:14px;text-align:center}
   })},{threshold:.6});
   document.querySelectorAll('[data-to]').forEach(function(n){io.observe(n)});
   // form
+  var WORKER_URL='';
   document.getElementById('form').addEventListener('submit',function(e){
     e.preventDefault();
-    var n=this.n.value.trim();
-    document.getElementById('thanks').textContent=n?n+', заявка отправлена':'Заявка отправлена';
-    document.getElementById('box').classList.add('sent');
+    var f=this, n=f.n.value.trim(), btn=f.querySelector('button');
+    var done=function(){
+      document.getElementById('thanks').textContent=n?n+', заявка отправлена':'Заявка отправлена';
+      document.getElementById('box').classList.add('sent');
+    };
+    if(!WORKER_URL){done();return}
+    btn.disabled=true; btn.textContent='Отправляем…';
+    fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,phone:f.t.value.trim(),topic:f.querySelector('select').value})})
+      .then(function(r){if(!r.ok)throw 0;done()})
+      .catch(function(){btn.disabled=false;btn.textContent='Отправить заявку';alert('Не удалось отправить заявку. Попробуйте ещё раз чуть позже.')});
   });
 })();
 </script>
